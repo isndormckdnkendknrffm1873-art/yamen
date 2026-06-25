@@ -1,65 +1,69 @@
-// 1. إعداد المشهد والكاميرا والمحرك (Renderer)
+// 1. إعداد المشهد والكاميرا والمحرك
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a1a); // خلفية رمادية غامقة للمطبخ
+scene.background = new THREE.Color(0x11141a); 
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById('game-canvas').appendChild(renderer.domElement);
 
-// 2. إضافة الإضاءة (مهمة جداً لإظهار تفاصيل وألوان الـ 3D)
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // إضاءة محيطية شاملة
+// 2. الإضاءة
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.8); // إضاءة موجهة للشمس لإنشاء أبعاد
-dirLight.position.set(5, 10, 7);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+dirLight.position.set(5, 8, 5);
 scene.add(dirLight);
 
-// ضبط موقع الكاميرا وزاوية الرؤية فوق طاولة التحضير
-camera.position.set(0, 2, 4);
+camera.position.set(0, 3, 5);
 camera.lookAt(0, 0, 0);
 
-// 3. طريقة تحميل ملف الـ GLB الجاهز مع معالجة الأخطاء والخامات
-const loader = new THREE.GLTFLoader();
-let burger;
+// 3. بناء مجسم برغر برمي هندسي (لتجنب مشاكل التحميل)
+const burgerGroup = new THREE.Group();
 
-loader.load('./burger.glb', function(gltf) {
-    burger = gltf.scene;
-    
-    // فحص أجزاء المجسم لتجنب الشاشة السوداء في حال لم تظهر صورة الألوان فوراً
-    burger.traverse((child) => {
-        if (child.isMesh) {
-            // إذا كان هناك خامات مفقودة، يتم وضع لون ذهبي/برتقالي افتراضي لتظهر الشطيرة
-            if (!child.material.map) {
-                child.material.color.setHex(0xffbe07); 
-            }
-        }
-    });
+// خبز سفلي
+const bottomBunGeo = new THREE.CylinderGeometry(1, 1.1, 0.2, 32);
+const bunMat = new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.5 });
+const bottomBun = new THREE.Mesh(bottomBunGeo, bunMat);
+bottomBun.position.y = -0.4;
+burgerGroup.add(bottomBun);
 
-    // تكبير حجم مجسمات Kenney لأنها تأتي صغيرة جداً في الوضع الافتراضي
-    burger.scale.set(12, 12, 12); 
-    burger.position.set(0, -0.5, 0); // ضبط الارتفاع ليكون في منتصف الشاشة
-    
-    scene.add(burger);
-    console.log("تم تحميل البرغر بنجاح وظهوره في المطبخ!");
-}, undefined, function(error) {
-    console.error('حدث خطأ في تحميل المجسم ثلاثي الأبعاد:', error);
-});
+// اللحمة (Patty)
+const meatGeo = new THREE.CylinderGeometry(0.95, 0.95, 0.25, 32);
+const meatMat = new THREE.MeshStandardMaterial({ color: 0x4f2f1d, roughness: 0.8 });
+const meat = new THREE.Mesh(meatGeo, meatMat);
+meat.position.y = -0.15;
+burgerGroup.add(meat);
 
-// 4. حلقة التحديث المستمر للعبة (Game Loop)
+// الجبن
+const cheeseGeo = new THREE.BoxGeometry(1.8, 0.04, 1.8);
+const cheeseMat = new THREE.MeshStandardMaterial({ color: 0xffbe07 });
+const cheese = new THREE.Mesh(cheeseGeo, cheeseMat);
+cheese.position.y = 0.01;
+cheese.rotation.y = Math.PI / 4;
+burgerGroup.add(cheese);
+
+// خبز علوي
+const topBunGeo = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+const topBun = new THREE.Mesh(topBunGeo, bunMat);
+topBun.position.y = 0.05;
+topBun.scale.y = 0.6;
+burgerGroup.add(topBun);
+
+scene.add(burgerGroup);
+
+// 4. حلقة الحركة والتحديث
 function animate() {
     requestAnimationFrame(animate);
     
-    // تدوير البرغر ببطء لإعطاء حيوية للعبة داخل المتصفح
-    if (burger) {
-        burger.rotation.y += 0.01;
-    }
+    // تدوير البرغر الهندسي
+    burgerGroup.rotation.y += 0.01;
 
     renderer.render(scene, camera);
 }
 animate();
 
-// 5. إعادة ضبط الأبعاد تلقائياً عند تدوير الهاتف أو تغيير حجم الشاشة
+// ضبط القياسات عند التدوير
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
