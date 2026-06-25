@@ -8,9 +8,15 @@
     <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 </head>
 <body>
-    <div id="ui-container">
-        <div class="score-board">💰 النقود: <span id="coins">1009</span></div>
-        <div class="timer">⏱️ الوقت</div>
+    <div id="ui-top-bar">
+        <div class="level-badge">Level 1</div>
+        <div class="score-board">💰 1009</div>
+        <div class="timer">⏱️ Time</div>
+    </div>
+    <div id="ui-bottom-bar">
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
     </div>
     <div id="game-canvas"></div>
     <script src="game.js"></script>
