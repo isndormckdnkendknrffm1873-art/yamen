@@ -1,0 +1,30 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: #171b21;
+    font-family: sans-serif;
+}
+
+/* واجهة المستخدم فوق الـ 3D */
+#ui-container {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10;
+    color: white;
+    font-size: 18px;
+    pointer-events: none; /* لتستطيع الضغط على العناصر ثلاثية الأبعاد خلف النص */
+}
+
+.score-board, .timer {
+    background: rgba(0,0,0,0.6);
+    padding: 8px 16px;
+    border-radius: 20px;
+}
