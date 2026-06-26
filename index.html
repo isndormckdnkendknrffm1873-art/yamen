@@ -2,22 +2,31 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shami Kitchen 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shami Kitchen - FPS POV</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 </head>
 <body>
-    <div id="ui-top-bar">
-        <div class="level-badge">Level 1</div>
-        <div class="score-board">💰 1009</div>
-        <div class="timer">⏱️ Time</div>
-    </div>
-    <div id="ui-bottom-bar">
-        <div class="progress-bar-container">
-            <div class="progress-bar"></div>
+    <div id="blocker">
+        <div id="instructions">
+            <span style="font-size:36px">اضغط للبدء</span>
+            <br /><br />
+            تحكم: WASD للتحرك | الماوس للنظر | كليك يسار للتفاعل
         </div>
     </div>
+
+    <div id="crosshair">+</div>
+
+    <div id="ui-top-bar">
+        <div class="level-badge">Shift 1</div>
+        <div class="score-board" id="coins-display">💰 0</div>
+        <div class="timer" id="tasks-display">الطلبات: 0</div>
+    </div>
+
+    <div id="action-prompt"></div>
+
     <div id="game-canvas"></div>
     <script src="game.js"></script>
 </body>
