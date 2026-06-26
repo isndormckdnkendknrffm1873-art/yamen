@@ -746,6 +746,11 @@ function spawnNewCustomer() {
     renderPOSScreen(`Order: ${sel.n}`);
 }
 
+const blockerEl = document.getElementById('blocker');
+const instructEl = document.getElementById('instructions');
+if (blockerEl) blockerEl.style.display = 'none';
+if (instructEl) instructEl.style.display = 'none';
+
 const controls = new THREE.PointerLockControls(camera, document.body);
 document.body.addEventListener('click', () => {
     if (!controls.isLocked) controls.lock();
